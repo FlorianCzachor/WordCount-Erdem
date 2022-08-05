@@ -11,27 +11,32 @@ import java.util.stream.Collectors;
 
 public class WordCount {
     private String Phrase;
+
     private String stopWordsPath = "src/main/resources/stopwords.txt";
+    private List<String> stopWords = new ArrayList<>();
     private boolean stopWord = false;
-    List<String> stopWords = new ArrayList<>();
 
     public WordCount(String phrase, boolean stopWords) {
         Phrase = phrase;
         stopWord = stopWords;
         if (stopWords) {
-            var content = ReadFile(stopWordsPath);
+            var content = readFile(stopWordsPath);
             content.stream().forEach((stopWord) -> {
+                //Adding spaces at the beginnning and end
+                //makes sure not words cotaining the stopwords are getting filtered
+                //Eg. " the "
+                // (the) filtered | (there) not filtered
                 this.stopWords.add(" " + stopWord + " ");
             });
+
         }
     }
 
-    public static List<String> ReadFile(String path) {
+    public static List<String> readFile(String path) {
         List<String> content = new ArrayList<>();
         try {
             File myObj = new File(path);
             Scanner myReader = new Scanner(myObj);
-
             while (myReader.hasNextLine()) {
                 String line = myReader.nextLine();
                 content.add(line);
@@ -45,18 +50,18 @@ public class WordCount {
         return content;
     }
 
-    public int GetWordCount() {
-        if (!Valid()) return -1;
+    public int getWordCount() {
+        if (!valid()) return -1;
 
         var parts = Phrase.split(" ");
 
         if (!stopWord) return parts.length;
 
-        var stopWordsCount = AmountOfStopWords(parts);
+        var stopWordsCount = amountOfStopWords(parts);
         return parts.length - stopWordsCount;
     }
 
-    private int AmountOfStopWords(String[] parts) {
+    private int amountOfStopWords(String[] parts) {
         int count = 0;
         Pattern pattern = Pattern.compile(stopWords.stream().collect(Collectors.joining("|")));
         Matcher matcher = pattern.matcher(Phrase);
@@ -67,7 +72,7 @@ public class WordCount {
         return count;
     }
 
-    private boolean Valid() {
+    private boolean valid() {
         Pattern pattern = Pattern.compile("[^a-zA-Z]");
         Matcher matcher = pattern.matcher(Phrase);
 

@@ -6,13 +6,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class WordCountTest {
     @Test
-    void getWordCountlvl1() {
+    void getWordCountLvl1() {
         WordCount wc = new WordCount("Heey my name is Erdem", false);
         assertEquals(5, wc.GetWordCount());
     }
 
     @Test
-    void getWordCountlvl2() {
+    void getWordCountLvl2() {
         WordCount wc = new WordCount("Mary had a little lamb", true);
         assertEquals(4, wc.GetWordCount());
     }
