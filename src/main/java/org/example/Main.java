@@ -20,12 +20,12 @@ public class Main {
                 e.printStackTrace();
             }
         } else {
-            var content = WordCount.ReadFile("src/main/resources/" + args[0]);
+            var content = WordCount.readFile("src/main/resources/" + args[0]);
             phrase = content.stream().collect(Collectors.joining(" "));
         }
 
         WordCount wc = new WordCount(phrase, true);
-        var result = wc.GetWordCount();
+        var result = wc.getWordCount();
         if (result == -1) {
             System.out.println("Phrase is not valid!");
         } else {

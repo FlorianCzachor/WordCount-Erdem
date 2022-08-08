@@ -7,17 +7,15 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class WordCount {
-    private String Phrase;
-
-    private String stopWordsPath = "src/main/resources/stopwords.txt";
-    private List<String> stopWords = new ArrayList<>();
+    private final String phrase;
+    private final String stopWordsPath = "src/main/resources/stopwords.txt";
+    private final List<String> stopWords = new ArrayList<>();
     private boolean stopWord = false;
 
     public WordCount(String phrase, boolean stopWords) {
-        Phrase = phrase;
+        this.phrase = phrase;
         stopWord = stopWords;
         if (stopWords) {
             var content = readFile(stopWordsPath);
@@ -28,7 +26,6 @@ public class WordCount {
                 // (the) filtered | (there) not filtered
                 this.stopWords.add(" " + stopWord + " ");
             });
-
         }
     }
 
@@ -53,29 +50,24 @@ public class WordCount {
     public int getWordCount() {
         if (!valid()) return -1;
 
-        var parts = Phrase.split(" ");
-
+        var parts = phrase.split(" ");
         if (!stopWord) return parts.length;
-
-        var stopWordsCount = amountOfStopWords(parts);
+        var stopWordsCount = amountOfStopWords();
         return parts.length - stopWordsCount;
     }
 
-    private int amountOfStopWords(String[] parts) {
+    private int amountOfStopWords() {
         int count = 0;
-        Pattern pattern = Pattern.compile(stopWords.stream().collect(Collectors.joining("|")));
-        Matcher matcher = pattern.matcher(Phrase);
+        Pattern pattern = Pattern.compile(String.join("|", stopWords));
+        Matcher matcher = pattern.matcher(phrase);
 
-        while (matcher.find()) {
-            count++;
-        }
+        while (matcher.find()) {count++;}
         return count;
     }
 
     private boolean valid() {
         Pattern pattern = Pattern.compile("[^a-zA-Z]");
-        Matcher matcher = pattern.matcher(Phrase);
-
+        Matcher matcher = pattern.matcher(phrase);
         if (matcher.find()) return true;
         return false;
     }
